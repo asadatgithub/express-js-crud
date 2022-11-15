@@ -3,8 +3,7 @@ import books from './routes/books.js'
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
-import mongoose from "mongoose"
-import Book from "./schemas/book.js"
+
 
 
 const app = express();
