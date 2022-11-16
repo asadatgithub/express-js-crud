@@ -1,5 +1,6 @@
 import express from 'express';
 import books from './routes/books.js'
+import user from './routes/user.js'
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from "mongoose"
@@ -15,6 +16,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/test", {
     useUnifiedTopology: true,
 })
 app.use('/books', books);
+app.use('/users', user);
+
 app.listen(5000, () => {
     console.log('Started routerlication on port 5000');
 });
