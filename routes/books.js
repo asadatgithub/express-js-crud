@@ -1,20 +1,23 @@
 
 import express from "express";
-import mongoose from "mongoose"
 import Book from "../schemas/book.js"
+
+import authenticate from "../middlewares/authentication.js";
 const router = express.Router();
 
-router.get("/", async (req, res) => {
- 
+router.get("/", authenticate, async (req, res) => {
+
     try {
         const books = await Book.find();
         res.json(books);
     } catch (err) {
         res.json({ message: err });
-    }
+    } o
 })
 
-router.get("/:id", async (req, res) => {
+
+
+router.get("/:id", authenticate, async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
         res.json(book);
@@ -23,7 +26,7 @@ router.get("/:id", async (req, res) => {
     }
 })
 
-router.post("/", async (req, res) => {
+router.post("/", authenticate, async (req, res) => {
     try {
         const result = await Book.create(req.body);
         res.status(200).json(result);
@@ -32,7 +35,7 @@ router.post("/", async (req, res) => {
     }
 })
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", authenticate, async (req, res) => {
     try {
         const result = await Book.findByIdAndUpdate(req.params.id, req.body);
         res.status(200).json(result);
@@ -41,7 +44,7 @@ router.patch("/:id", async (req, res) => {
     }
 })
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authenticate, async (req, res) => {
     try {
         const result = await Book.findByIdAndDelete(req.params.id);
         res.status(200).json(result);
