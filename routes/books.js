@@ -1,6 +1,6 @@
 
 import express from "express";
-import Book from "../schemas/book.js"
+import Book from "../models/book.js"
 import validate from "../middlewares/validation.js";
 import schema from "../validations/user.validation.js";
 import authenticate from "../middlewares/authentication.js";

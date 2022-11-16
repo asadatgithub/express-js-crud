@@ -1,9 +1,10 @@
 
 import express from "express";
-import User from "../schemas/user.js"
+import User from "../models/user.js"
 import jwt from "jsonwebtoken";
 import validate from "../middlewares/validation.js";
 import schema from "../validations/user.validation.js";
+import upload from '../middlewares/upload.js'
 const router = express.Router();
 
 router.post("/login", validate(schema.login), async (req, res) => {
@@ -18,11 +19,13 @@ router.post("/login", validate(schema.login), async (req, res) => {
 })
 
 
-router.post("/sign-up", async (req, res) => {
-    try{
+router.post("/sign-up", upload.single('image'), validate(schema.register), async (req, res) => {
+    try {
+        if (req.file)
+            req.body.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
         const result = await User.create(req.body);
         res.status(200).json(result);
-    }catch(error){
+    } catch (error) {
         res.status(500).send(error);
     }
 

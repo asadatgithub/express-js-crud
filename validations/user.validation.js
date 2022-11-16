@@ -1,6 +1,7 @@
 import Joi from "joi";
 
 export default {
+
   id: {
     params: Joi.object().keys({
       id: Joi.string().required(),
@@ -9,7 +10,8 @@ export default {
   
   register: {
     body: Joi.object().keys({
-        email: Joi.string().required().email(),
+        image: Joi.string(),
+        email: Joi.string().required(),
         password: Joi.string().required(),
       }),
   },
