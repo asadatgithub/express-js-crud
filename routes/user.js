@@ -2,9 +2,11 @@
 import express from "express";
 import User from "../schemas/user.js"
 import jwt from "jsonwebtoken";
+import validate from "../middlewares/validation.js";
+import schema from "../validations/user.validation.js";
 const router = express.Router();
 
-router.post("/login", async (req, res) => {
+router.post("/login", validate(schema.login), async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email, password: req.body.password });
         if (!user) return res.status(401).send("Invalid email or password.");

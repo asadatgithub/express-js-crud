@@ -1,7 +1,8 @@
 
 import express from "express";
 import Book from "../schemas/book.js"
-
+import validate from "../middlewares/validation.js";
+import schema from "../validations/user.validation.js";
 import authenticate from "../middlewares/authentication.js";
 const router = express.Router();
 
@@ -12,15 +13,19 @@ router.get("/", authenticate, async (req, res) => {
         res.json(books);
     } catch (err) {
         res.json({ message: err });
-    } o
+    }
 })
 
 
-
-router.get("/:id", authenticate, async (req, res) => {
+router.get("/:id", authenticate, validate(schema.id), async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
-        res.json(book);
+        if (book) {
+            res.json(book);
+        }
+        else {
+            res.status(404).json({ "message": `Book with ID ${req.params.id} was not found.` })
+        }
     } catch (err) {
         res.json({ message: err });
     }
@@ -35,16 +40,22 @@ router.post("/", authenticate, async (req, res) => {
     }
 })
 
-router.patch("/:id", authenticate, async (req, res) => {
+router.patch("/:id", authenticate, validate(schema.id), async (req, res) => {
     try {
         const result = await Book.findByIdAndUpdate(req.params.id, req.body);
-        res.status(200).json(result);
+        if (result) {
+            res.status(200).json(result);
+        }
+        else {
+            res.status(404).json({ "message": `Book with ID ${req.params.id} was not found.` })
+        }
+
     } catch (err) {
         res.json({ message: err });
     }
 })
 
-router.delete("/:id", authenticate, async (req, res) => {
+router.delete("/:id", authenticate, validate(schema.id), async (req, res) => {
     try {
         const result = await Book.findByIdAndDelete(req.params.id);
         res.status(200).json(result);
